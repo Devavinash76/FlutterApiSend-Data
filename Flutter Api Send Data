@@ -1,0 +1,36 @@
+Future<void> userFormData() async {
+    var body = {
+      'user_id': userId,
+      'venue_type[]': listToString(tempVenueList),
+      'lead_source': 'appLink',
+      'city_id': selectedCityId.toString(),
+      'area_id': selectedAreaId.toString(),
+      'male': male.toString(),
+      'female': female.toString(),
+      'kids': kid.toString(),
+      'party_date': tempPartyDate.toString(),
+      'party_time': tempPartyTime.toString(),
+      'type': _selectedPackage.toString(),
+      'my_choice': selectedChoiceId.toString(),
+      'whatsapp_msg': 'true',
+    };
+    final response = await http.post(
+      Uri.parse(' '),
+      body: body,
+    );
+    print(" Body Data $body");
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData['status'] == true) {
+        print('SubmitData\n');
+        Get.to(const bids());
+      } else {
+        print('False');
+        // Handle the case where responseData['status'] is not true
+      }
+    } else {
+      // Handle other response status codes
+      print('Failed to fetch data: ${response.statusCode}');
+    }
+  }
